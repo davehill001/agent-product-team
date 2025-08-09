@@ -1,0 +1,315 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/wireframe-schema.json",
+  "title": "App Wireframe Schema",
+  "description": "A schema for defining app wireframes, including screens, components, navigation, state, and version history. Used to instruct AIs to output JSON in this format for MVP designs.",
+  "type": "object",
+  "properties": {
+    "app": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the app"
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief overview of the app's purpose"
+        },
+        "screens": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/screen"
+          },
+          "description": "Array of screens in the app"
+        },
+        "version_history": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/version_entry"
+          },
+          "description": "Changelog tracking modifications to the wireframe"
+        }
+      },
+      "required": ["name", "description", "screens", "version_history"]
+    }
+  },
+  "required": ["app"],
+  "$defs": {
+    "screen": {
+      "type": "object",
+      "properties": {
+        "screen_id": {
+          "type": "string",
+          "description": "Unique identifier for the screen"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name of the screen"
+        },
+        "purpose": {
+          "type": "string",
+          "description": "High-level purpose of the screen"
+        },
+        "layout": {
+          "$ref": "#/$defs/layout"
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/component"
+          },
+          "description": "Array of components on the screen"
+        },
+        "navigation": {
+          "$ref": "#/$defs/navigation"
+        },
+        "state": {
+          "$ref": "#/$defs/state"
+        }
+      },
+      "required": ["screen_id", "name", "purpose", "layout", "components", "navigation", "state"]
+    },
+    "layout": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Layout type (e.g., stack, grid, absolute)"
+        },
+        "orientation": {
+          "type": "string",
+          "enum": ["vertical", "horizontal"],
+          "description": "Orientation of the layout"
+        },
+        "constraints": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "string",
+              "description": "Width constraint (e.g., 100%, 200px)"
+            },
+            "height": {
+              "type": "string",
+              "description": "Height constraint (e.g., 100%, 200px)"
+            },
+            "padding": {
+              "type": "string",
+              "description": "Padding value (e.g., 16px)"
+            },
+            "margin": {
+              "type": "string",
+              "description": "Margin value (e.g., 0)"
+            }
+          },
+          "additionalProperties": true,
+          "description": "Additional layout constraints"
+        }
+      },
+      "required": ["type", "orientation", "constraints"]
+    },
+    "component": {
+      "type": "object",
+      "properties": {
+        "component_id": {
+          "type": "string",
+          "description": "Unique identifier for the component"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of component (e.g., button, text, list)"
+        },
+        "purpose": {
+          "type": "string",
+          "description": "Specific role of the component"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "size": {
+              "type": "object",
+              "properties": {
+                "width": {
+                  "type": "string"
+                },
+                "height": {
+                  "type": "string"
+                }
+              },
+              "required": ["width", "height"]
+            },
+            "position": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "type": "string"
+                },
+                "y": {
+                  "type": "string"
+                }
+              },
+              "required": ["x", "y"]
+            },
+            "style": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "description": "Style properties (e.g., background, color, font)"
+            },
+            "content": {
+              "type": "string",
+              "description": "Content of the component (text, placeholder, etc.)"
+            },
+            "interactions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/interaction"
+              }
+            }
+          },
+          "required": ["size", "position", "style", "content", "interactions"],
+          "additionalProperties": true
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/component"
+          },
+          "description": "Nested child components (recursive)"
+        }
+      },
+      "required": ["component_id", "type", "purpose", "properties", "children"]
+    },
+    "interaction": {
+      "type": "object",
+      "properties": {
+        "trigger": {
+          "type": "string",
+          "description": "Event trigger (e.g., onClick, onChange)"
+        },
+        "action": {
+          "type": "string",
+          "description": "Action to perform (e.g., navigate, update_state)"
+        },
+        "target": {
+          "type": "string",
+          "description": "Target component or screen ID"
+        }
+      },
+      "required": ["trigger", "action", "target"]
+    },
+    "navigation": {
+      "type": "object",
+      "properties": {
+        "entry_points": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nav_point"
+          }
+        },
+        "exit_points": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nav_point"
+          }
+        }
+      },
+      "required": ["entry_points", "exit_points"]
+    },
+    "nav_point": {
+      "type": "object",
+      "properties": {
+        "from_screen_id": {
+          "type": "string",
+          "description": "Source screen ID (for entry_points)"
+        },
+        "to_screen_id": {
+          "type": "string",
+          "description": "Destination screen ID (for exit_points)"
+        },
+        "trigger": {
+          "type": "string",
+          "description": "Trigger event (e.g., button_click)"
+        },
+        "conditions": {
+          "type": "string",
+          "description": "Optional conditions (e.g., none, field_not_empty)"
+        }
+      },
+      "additionalProperties": false
+    },
+    "state": {
+      "type": "object",
+      "properties": {
+        "dynamic_elements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dynamic_element"
+          }
+        }
+      },
+      "required": ["dynamic_elements"]
+    },
+    "dynamic_element": {
+      "type": "object",
+      "properties": {
+        "component_id": {
+          "type": "string",
+          "description": "ID of the dynamic component"
+        },
+        "data_source": {
+          "type": "string",
+          "description": "Data source (e.g., local_storage, API)"
+        },
+        "update_trigger": {
+          "type": "string",
+          "description": "Trigger for updates (e.g., on_load, on_change)"
+        }
+      },
+      "required": ["component_id", "data_source", "update_trigger"]
+    },
+    "version_entry": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Version number (e.g., 1.0)"
+        },
+        "date": {
+          "type": "string",
+          "description": "Date of the change (e.g., YYYY-MM-DD)"
+        },
+        "changes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/change"
+          }
+        }
+      },
+      "required": ["version", "date", "changes"]
+    },
+    "change": {
+      "type": "object",
+      "properties": {
+        "screen_id": {
+          "type": "string",
+          "description": "ID of the affected screen"
+        },
+        "component_id": {
+          "type": "string",
+          "description": "ID of the affected component (or 'none')"
+        },
+        "change_description": {
+          "type": "string",
+          "description": "Description of the change"
+        },
+        "author": {
+          "type": "string",
+          "description": "Author of the change (e.g., LLM, User)"
+        }
+      },
+      "required": ["screen_id", "component_id", "change_description", "author"]
+    }
+  }
+} 
