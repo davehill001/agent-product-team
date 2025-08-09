@@ -7,16 +7,16 @@ This document outlines the implementation of the **OPUS framework** (Outcome, Pu
 ## 🏗️ Current System Analysis
 
 ### Existing Architecture
-- **5 Agents**: Product Manager (Max), Designer (Alex), Engineer (Sam), QA (Jamie), Customer Advocate
+- **6 Agents**: Product Manager (Max), Designer (Alex), Frontend Engineer (Sam), Backend Engineer (NEW), QA (Jamie), Customer Advocate
 - **AutoGen Integration**: Group chat with consensus detection
-- **Output**: JSON wireframes with schema validation
+- **Output**: OPUS-structured wireframes with clear blocks
 - **Memory**: Conversation history and state tracking
 
 ### Current Limitations
 - No structured OPUS framework integration
 - Limited debate mechanics
 - Missing backend engineering perspective
-- No explicit OPUS-based output format
+- Complex JSON output format
 
 ## 🎯 OPUS Framework Integration
 
@@ -24,10 +24,10 @@ This document outlines the implementation of the **OPUS framework** (Outcome, Pu
 
 **OPUS** is a structured framework for design thinking that breaks down features into four key elements:
 
-1. **Outcome**: What users want to achieve
-2. **Purpose**: Why the feature exists  
-3. **User**: Who the feature is for
-4. **Scenario**: When/how the feature is used
+1. **Outcome (O)**: What users want to achieve
+2. **Purpose (P)**: Why the feature exists  
+3. **User (U)**: Who the feature is for
+4. **Scenario (S)**: When/how the feature is used
 
 ### OPUS Implementation Strategy
 
@@ -39,7 +39,7 @@ Transform existing agents to incorporate OPUS framework:
 Max (PM) → PM with OPUS Outcome/Purpose focus
 Alex (Designer) → Designer with OPUS User/Scenario focus  
 Sam (Engineer) → FE Developer with OPUS technical feasibility
-NEW: Backend Engineer → BE Developer with OPUS data/API focus
+NEW: BackendEngineer → BE Developer with OPUS data/API focus
 Jamie (QA) → QA with OPUS testing/edge case focus
 Customer Advocate → User Advocate with OPUS user value focus
 ```
@@ -58,34 +58,32 @@ Implement structured OPUS-based discussions:
 ```
 
 #### Phase 3: OPUS Output Format
-Transform wireframe JSON to include OPUS elements:
+Transform to simple, readable OPUS blocks for each screen, component, and function:
 
-```json
-{
-  "app": {
-    "name": "App Name",
-    "description": "App description",
-    "opus_framework": {
-      "outcome": "What users want to achieve",
-      "purpose": "Why the app exists",
-      "user": "Who the app is for",
-      "scenario": "When/how the app is used"
-    },
-    "screens": [
-      {
-        "screen_id": "screen_name",
-        "name": "Screen Name",
-        "opus": {
-          "outcome": "Screen-specific outcome",
-          "purpose": "Screen-specific purpose", 
-          "user": "Screen-specific user",
-          "scenario": "Screen-specific scenario"
-        },
-        "components": [...]
-      }
-    ]
-  }
-}
+```
+Name: Login/Sign Up Page
+O: Users want to securely access their account and start using the app
+P: Provide secure authentication and user account access
+U: New users creating accounts, existing users logging in
+S: User opens app for first time, user returns to app, user switches devices
+
+Name: Google OAuth Button
+O: Users want to quickly sign in using their existing Google account
+P: Reduce friction in authentication process and increase conversion
+U: Users with Google accounts who prefer social login
+S: User clicks "Sign in with Google" during registration or login flow
+
+Name: Login Form Inputs
+O: Users want to enter their credentials to access their account
+P: Collect and validate user authentication credentials
+U: Users with email/password accounts
+S: User enters email and password to log in
+
+Name: Login Form Submit Button
+O: Users want to submit their credentials and access their account
+P: Process authentication request and redirect to main app
+U: Users with valid credentials ready to log in
+S: User clicks submit after entering email and password
 ```
 
 ## 🤖 Enhanced Agent Definitions
@@ -105,7 +103,7 @@ max_agent = AssistantAgent(
         f"- PURPOSE: Explain why each feature exists and its business value\n"
         f"- Facilitate OPUS-based discussions and debates\n"
         f"- Ensure all features align with user outcomes and business purpose\n"
-        f"CRITICAL: When consensus is reached, output 'CONSENSUS REACHED:' followed by COMPLETE wireframe JSON with OPUS elements."
+        f"CRITICAL: When consensus is reached, output 'CONSENSUS REACHED:' followed by OPUS blocks for each screen, component, and function."
     ),
     llm_config=primary_config,
 )
@@ -270,7 +268,7 @@ OPUS_PHASES = {
         "name": "Consensus Building",
         "focus": "Agreement on OPUS structure",
         "agents": ["Max", "Alex", "Sam", "BackendEngineer", "Jamie", "CustomerAdvocate"],
-        "output": "Final consensus and wireframe"
+        "output": "Final consensus and OPUS blocks"
     }
 }
 ```
@@ -307,125 +305,86 @@ OPUS_DEBATE_RULES = {
 
 ## 📊 OPUS Output Format
 
-### Enhanced JSON Schema
+### Simple OPUS Block Format
 
-Transform the existing wireframe JSON to include OPUS elements:
+Transform the output to use simple, readable OPUS blocks for each screen, component, and function:
 
-```json
-{
-  "app": {
-    "name": "App Name",
-    "description": "App description",
-    "opus_framework": {
-      "outcome": "What users want to achieve with this app",
-      "purpose": "Why this app exists and its business value",
-      "user": "Who this app is for and their characteristics", 
-      "scenario": "When and how this app is used"
-    },
-    "screens": [
-      {
-        "screen_id": "screen_name",
-        "name": "Screen Name",
-        "purpose": "Screen-specific purpose",
-        "opus": {
-          "outcome": "What users want to achieve on this screen",
-          "purpose": "Why this screen exists",
-          "user": "Who this screen is for",
-          "scenario": "When/how this screen is used"
-        },
-        "layout": {
-          "type": "stack",
-          "orientation": "vertical",
-          "constraints": {
-            "width": "100%",
-            "height": "100%"
-          }
-        },
-        "components": [
-          {
-            "component_id": "component_name",
-            "type": "component_type",
-            "purpose": "Component-specific purpose",
-            "opus": {
-              "outcome": "What users want to achieve with this component",
-              "purpose": "Why this component exists",
-              "user": "Who this component is for", 
-              "scenario": "When/how this component is used"
-            },
-            "properties": {
-              "size": {"width": "100%", "height": "auto"},
-              "position": {"x": "0", "y": "0"},
-              "style": {"background": "white"},
-              "content": "Component content",
-              "interactions": [
-                {
-                  "trigger": "onClick",
-                  "action": "navigate",
-                  "target": "next_screen"
-                }
-              ]
-            },
-            "children": []
-          }
-        ],
-        "navigation": {
-          "entry_points": [],
-          "exit_points": [
-            {
-              "to_screen_id": "next_screen",
-              "trigger": "form_submit",
-              "conditions": "none"
-            }
-          ]
-        },
-        "state": {
-          "dynamic_elements": []
-        }
-      }
-    ],
-    "backend_architecture": {
-      "data_models": [
-        {
-          "model_name": "User",
-          "fields": ["id", "name", "email", "preferences"],
-          "opus": {
-            "outcome": "Store user data for personalization",
-            "purpose": "Enable user-specific features",
-            "user": "All app users",
-            "scenario": "User registration, login, preferences"
-          }
-        }
-      ],
-      "api_endpoints": [
-        {
-          "endpoint": "/api/users",
-          "method": "GET",
-          "purpose": "Retrieve user data",
-          "opus": {
-            "outcome": "Access user information",
-            "purpose": "Enable user-specific functionality",
-            "user": "Authenticated users",
-            "scenario": "User profile, settings, preferences"
-          }
-        }
-      ]
-    },
-    "version_history": [
-      {
-        "version": "1.0",
-        "date": "2024-01-01",
-        "changes": [
-          {
-            "screen_id": "screen_name",
-            "component_id": "component_name", 
-            "change_description": "Initial creation with OPUS framework",
-            "author": "Multi-Agent Team"
-          }
-        ]
-      }
-    ]
-  }
-}
+```
+# APP: [App Name]
+O: [What users want to achieve with this app]
+P: [Why this app exists and its business value]
+U: [Who this app is for and their characteristics]
+S: [When and how this app is used]
+
+# SCREEN: [Screen Name]
+O: [What users want to achieve on this screen]
+P: [Why this screen exists]
+U: [Who this screen is for]
+S: [When/how this screen is used]
+
+# COMPONENT: [Component Name]
+O: [What users want to achieve with this component]
+P: [Why this component exists]
+U: [Who this component is for]
+S: [When/how this component is used]
+
+# FUNCTION: [Function Name]
+O: [What users want to achieve with this function]
+P: [Why this function exists]
+U: [Who this function is for]
+S: [When/how this function is used]
+```
+
+### Example OPUS Output
+
+```
+# APP: Fitness Tracking App
+O: Users want to track their workouts, monitor progress, and achieve fitness goals
+P: Help users maintain fitness routines and achieve health objectives
+U: Fitness enthusiasts, gym-goers, health-conscious individuals
+S: Daily workout tracking, progress monitoring, goal setting
+
+# SCREEN: Login/Sign Up Page
+O: Users want to securely access their account and start using the app
+P: Provide secure authentication and user account access
+U: New users creating accounts, existing users logging in
+S: User opens app for first time, user returns to app, user switches devices
+
+# COMPONENT: Google OAuth Button
+O: Users want to quickly sign in using their existing Google account
+P: Reduce friction in authentication process and increase conversion
+U: Users with Google accounts who prefer social login
+S: User clicks "Sign in with Google" during registration or login flow
+
+# COMPONENT: Login Form Inputs
+O: Users want to enter their credentials to access their account
+P: Collect and validate user authentication credentials
+U: Users with email/password accounts
+S: User enters email and password to log in
+
+# COMPONENT: Login Form Submit Button
+O: Users want to submit their credentials and access their account
+P: Process authentication request and redirect to main app
+U: Users with valid credentials ready to log in
+S: User clicks submit after entering email and password
+
+# SCREEN: Dashboard
+O: Users want to see their fitness overview and quick access to key features
+P: Provide central hub for fitness tracking and app navigation
+U: Authenticated users with fitness data
+S: User opens app after login, user returns to app
+
+# COMPONENT: Workout Summary Card
+O: Users want to see their recent workout activity and progress
+P: Display key fitness metrics and encourage continued engagement
+U: Active fitness users tracking workouts
+S: User views dashboard, user checks progress
+
+# FUNCTION: Save Workout
+O: Users want to record their completed workout for tracking
+P: Store workout data for progress monitoring and analytics
+U: Users who have completed a workout
+S: User finishes workout and wants to save it
 ```
 
 ## 🔄 Implementation Phases
@@ -440,7 +399,7 @@ Transform the existing wireframe JSON to include OPUS elements:
 **Deliverables:**
 - Updated agent system messages with OPUS focus
 - OPUS discussion framework implementation
-- Basic OPUS output format
+- Basic OPUS block output format
 
 **Tasks:**
 1. Update `agents.py` with OPUS-enhanced agent definitions
@@ -458,30 +417,30 @@ Transform the existing wireframe JSON to include OPUS elements:
 **Deliverables:**
 - New backend engineer agent
 - Backend architecture considerations in OPUS framework
-- Enhanced OPUS output with backend elements
+- Enhanced OPUS blocks with backend elements
 
 **Tasks:**
 1. Create backend engineer agent in `agents.py`
 2. Add backend architecture to OPUS framework
-3. Update JSON schema to include backend elements
+3. Update output format to include backend OPUS blocks
 4. Integrate backend perspective into discussions
 
 ### Phase 3: Enhanced Output & Integration (Weeks 5-6)
 
 **Goals:**
-- Transform wireframe JSON to include OPUS elements
+- Transform output to OPUS block format
 - Implement Cursor-compatible OPUS output
 - Add OPUS-based code generation prompts
 
 **Deliverables:**
-- OPUS-structured wireframe JSON
-- Cursor integration with OPUS output
+- OPUS block-structured output
+- Cursor integration with OPUS blocks
 - OPUS-based code generation capabilities
 
 **Tasks:**
-1. Update JSON schema to include OPUS elements
-2. Transform wireframe output to OPUS format
-3. Create Cursor integration with OPUS output
+1. Update output format to use OPUS blocks
+2. Transform conversation results to OPUS block format
+3. Create Cursor integration with OPUS blocks
 4. Implement OPUS-based code generation
 
 ### Phase 4: Optimization & Testing (Weeks 7-8)
@@ -499,7 +458,7 @@ Transform the existing wireframe JSON to include OPUS elements:
 **Tasks:**
 1. Optimize OPUS discussion efficiency
 2. Test OPUS framework with various scenarios
-3. Validate Cursor integration with OPUS output
+3. Validate Cursor integration with OPUS blocks
 4. Document OPUS implementation results
 
 ## 🎯 Key Implementation Details
@@ -515,10 +474,10 @@ def create_opus_enhanced_agents(task_id: str, conversation_state: ConversationSt
     # OPUS framework base prompt
     opus_base_prompt = (
         f"Use OPUS framework for all discussions:\n"
-        f"- OUTCOME: What users want to achieve\n"
-        f"- PURPOSE: Why features exist\n" 
-        f"- USER: Who features are for\n"
-        f"- SCENARIO: When/how features are used\n"
+        f"- OUTCOME (O): What users want to achieve\n"
+        f"- PURPOSE (P): Why features exist\n" 
+        f"- USER (U): Who features are for\n"
+        f"- SCENARIO (S): When/how features are used\n"
         f"Reference OPUS elements explicitly in discussions and debates."
     )
     
@@ -559,26 +518,54 @@ class OPUSConversationState(ConversationState):
 
 ```python
 # OPUS Output Generation in utils.py
-def generate_opus_wireframe(conversation_result: Dict[str, Any]) -> Dict[str, Any]:
+def generate_opus_blocks(conversation_result: Dict[str, Any]) -> str:
     """
-    Generate OPUS-structured wireframe from conversation result.
+    Generate OPUS block format from conversation result.
     """
+    opus_blocks = []
+    
     # Extract OPUS elements from conversation
-    opus_elements = extract_opus_elements(conversation_result)
+    app_opus = extract_app_opus(conversation_result)
+    screen_opus_blocks = extract_screen_opus_blocks(conversation_result)
+    component_opus_blocks = extract_component_opus_blocks(conversation_result)
+    function_opus_blocks = extract_function_opus_blocks(conversation_result)
     
-    # Generate OPUS-structured wireframe
-    opus_wireframe = {
-        "app": {
-            "name": conversation_result.get("app_name", "App Name"),
-            "description": conversation_result.get("description", "App description"),
-            "opus_framework": opus_elements,
-            "screens": generate_opus_screens(conversation_result),
-            "backend_architecture": generate_backend_architecture(conversation_result),
-            "version_history": conversation_result.get("version_history", [])
-        }
-    }
+    # Generate OPUS blocks
+    opus_blocks.append(f"# APP: {app_opus['name']}")
+    opus_blocks.append(f"O: {app_opus['outcome']}")
+    opus_blocks.append(f"P: {app_opus['purpose']}")
+    opus_blocks.append(f"U: {app_opus['user']}")
+    opus_blocks.append(f"S: {app_opus['scenario']}")
+    opus_blocks.append("")
     
-    return opus_wireframe
+    # Add screen OPUS blocks
+    for screen in screen_opus_blocks:
+        opus_blocks.append(f"# SCREEN: {screen['name']}")
+        opus_blocks.append(f"O: {screen['outcome']}")
+        opus_blocks.append(f"P: {screen['purpose']}")
+        opus_blocks.append(f"U: {screen['user']}")
+        opus_blocks.append(f"S: {screen['scenario']}")
+        opus_blocks.append("")
+    
+    # Add component OPUS blocks
+    for component in component_opus_blocks:
+        opus_blocks.append(f"# COMPONENT: {component['name']}")
+        opus_blocks.append(f"O: {component['outcome']}")
+        opus_blocks.append(f"P: {component['purpose']}")
+        opus_blocks.append(f"U: {component['user']}")
+        opus_blocks.append(f"S: {component['scenario']}")
+        opus_blocks.append("")
+    
+    # Add function OPUS blocks
+    for function in function_opus_blocks:
+        opus_blocks.append(f"# FUNCTION: {function['name']}")
+        opus_blocks.append(f"O: {function['outcome']}")
+        opus_blocks.append(f"P: {function['purpose']}")
+        opus_blocks.append(f"U: {function['user']}")
+        opus_blocks.append(f"S: {function['scenario']}")
+        opus_blocks.append("")
+    
+    return "\n".join(opus_blocks)
 ```
 
 ## 🎯 Expected Benefits
@@ -596,7 +583,7 @@ def generate_opus_wireframe(conversation_result: Dict[str, Any]) -> Dict[str, An
 - **Backend Integration**: Full-stack perspective with backend engineer
 
 ### Better Code Generation
-- **Cursor Integration**: OPUS-structured output for Cursor
+- **Cursor Integration**: OPUS block output for Cursor
 - **Actionable Design**: Clear outcomes, purposes, users, and scenarios
 - **Technical Context**: Backend architecture considerations
 - **Iterative Building**: Support for iterative development
@@ -614,7 +601,6 @@ def generate_opus_wireframe(conversation_result: Dict[str, Any]) -> Dict[str, An
 - [OPUS Framework Documentation](https://example.com/opus-framework)
 - [AutoGen Multi-Agent Systems](https://microsoft.github.io/autogen/)
 - [Cursor Integration Guide](https://cursor.sh/docs)
-- [JSON Schema Specification](https://json-schema.org/)
 
 ---
 
